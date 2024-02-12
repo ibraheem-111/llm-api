@@ -1,5 +1,5 @@
 from flask import Flask, request
-import psycopg2
+from db import DataBase
 
 app = Flask(__name__)
 
@@ -9,22 +9,13 @@ def hello_world():
 
 @app.route("/order")
 def getorder():
+    db = DataBase()
     # data = request.json
     filter = request.args.get('filter')
     value = request.args.get('value')
-    params = {
-        "host": "localhost",
-        "port": 5432,
-        "database": "postgres",
-        "user": "postgres",
-        "password": "ibraheem"
-    }
 
-# Construct connection string
-    conn_string = "dbname={database} user={user} password={password} host={host} port={port}".format(**params)
-
-# Establish connection
-    conn = psycopg2.connect(conn_string)
+# # Establish connection
+    conn = db.connect()
 
     cur = conn.cursor()
 
@@ -43,29 +34,17 @@ def getorder():
 
     print(order)
     print(order_dict)
-    conn.commit()
-    cur.close()
-    conn.close()
+    db.close_connection(conn, cur)
     
     return {"order":order_dict}, 200
 
-@app.route("customer")
+@app.route("/customer")
 def get_customer():
     # filter = request.args.get('filter')
     value = request.args.get('customer_id')
-    params = {
-        "host": "localhost",
-        "port": 5432,
-        "database": "postgres",
-        "user": "postgres",
-        "password": "ibraheem"
-    }
 
-# Construct connection string
-    conn_string = "dbname={database} user={user} password={password} host={host} port={port}".format(**params)
-
-# Establish connection
-    conn = psycopg2.connect(conn_string)
+    db = DataBase()
+    conn = db.connect()
 
     cur = conn.cursor()
 
@@ -82,29 +61,17 @@ def get_customer():
 
     print(customer)
     print(customer_dict)
-    conn.commit()
-    cur.close()
-    conn.close()
+    db.close_connection(conn, cur)
     
     return {"order":customer_dict}, 200
 
-@app.route("product")
+@app.route("/product")
 def get_product():
     # filter = request.args.get('filter')
     value = request.args.get('product_id')
-    params = {
-        "host": "localhost",
-        "port": 5432,
-        "database": "postgres",
-        "user": "postgres",
-        "password": "ibraheem"
-    }
-
-# Construct connection string
-    conn_string = "dbname={database} user={user} password={password} host={host} port={port}".format(**params)
-
-# Establish connection
-    conn = psycopg2.connect(conn_string)
+    db = DataBase()
+    conn = db.connect()
+    conn = db.connect()
 
     cur = conn.cursor()
 
@@ -121,8 +88,6 @@ def get_product():
 
     print(product)
     print(product_dict)
-    conn.commit()
-    cur.close()
-    conn.close()
+    db.close_connection(conn, cur)
     
     return {"order":product_dict}, 200
