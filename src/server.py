@@ -19,7 +19,7 @@ def getorder():
 
     cur = conn.cursor()
 
-    cur.execute(f"select * from orders where {filter}={value}")
+    cur.execute(f"select * from orders where {filter}='{value}'")
 
     order = cur.fetchone()
     
